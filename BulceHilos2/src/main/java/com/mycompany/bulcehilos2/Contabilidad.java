@@ -4,102 +4,37 @@
  */
 package com.mycompany.bulcehilos2;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-/**
- *
- * @author Hector.garaboacasas
- */
 public class Contabilidad {
-    
-    public Contabilidad(ArrayList<Usuario> listaUser){
-        
-        Double dineroinicial=0.0;
-        
-        for(int i=0;i<100;i++){
-            
-        double a=(Math.random()*1500)+1;
-        double dinero=(double)Math.round(a * 100d) / 100d;
-        
-        int id=(int)(Math.random()*100);
-        
-        
-        
-        Usuario user=new Usuario(id, dinero);
-        
-        listaUser.add(user);
-        
-        dineroinicial+=dinero;
-            
+    private final Map<Integer, Usuario> usuarios;
+    private final Random random = new Random();
+
+    public Contabilidad(int numeroUsuarios) {
+        usuarios = new HashMap<>();
+        for (int i = 1; i <= numeroUsuarios; i++) {
+            double saldoInicial = 1000 + (500 * random.nextDouble()); // Saldo inicial aleatorio entre 1000 y 1500 euros
+            usuarios.put(i, new Usuario(i, saldoInicial));
         }
-        
-        System.out.println(dineroinicial);
-        
-    
-        
-        
-        
-       
-        
-        
-        
     }
-    public void inicializar(ArrayList<Usuario> listaUser, int trans){
-        
-        int id1=(int)(Math.random()*100);
-        
-      Usuario user1= listaUser.get(id1);
-      
-      int id2=(int)(Math.random()*100);
-      
-      Usuario user2= listaUser.get(id2);
-      
-      
-      
-      //da nums negativos
-      double bizum= (double)Math.round(((Math.random()*500)+1) * 100d) / 100d;
-      
-      if(user1!=user2){
-          System.out.println("transaccion nº " + trans +" entre: ");
-          
-          double user1dinero=user1.getDinero();
-          
-          double user1dinerofinal=user1dinero-bizum;
-          
-          user1.setDinero(user1dinerofinal);
-          
-         double user2dinero=user2.getDinero();
-          
-          user2.setDinero(user2dinero);
-          
-          
-          System.out.println(user1.toString() + " Emisor");
-          System.out.println(" transaccion de "+ bizum + " euros");
-          System.out.println(user2.toString() +" receptor");
-          
-          System.out.println("-----------------------------");
-      }
-      if(user1==user2){
-          System.out.println(" Mismo usuario " + user1.getId());
-          System.out.println("-----------------------------");
-      }
-      
-      
-      
-       
-        
-        
-        
-    }
+
+    //synchronized
     
-//    public static void main(String[] args) {
-//        
-//        
-//        for(int i =0;i<10000;i++){
-//        
-//        
-//        double a=(Math.random()*500)+1;
-//        System.out.println((double)Math.round(a * 100d) / 100d);
-//        }
-//    }
+    public  void realizarTransaccion(int origen, int destino, double cantidad) {
+        if (origen != destino && usuarios.get(origen).getSaldo() >= cantidad) {
+            usuarios.get(origen).restarSaldo(cantidad);
+            usuarios.get(destino).agregarSaldo(cantidad);
+            System.out.printf("Transaccion: %d -> %d, Cantidad: %.2f euros\n", origen, destino, cantidad);
+        }
+    }
+
+    public double calcularSaldoTotal() {
+        return usuarios.values().stream().mapToDouble(Usuario::getSaldo).sum();
+    }
+
+    public Map<Integer, Usuario> getUsuarios() {
+        return usuarios;
+    }
 }
