@@ -6,30 +6,38 @@ package com.mycompany.bulcehilos2;
 
 /**
  *
- * @author Hector.garaboacasas
+ * @author hector.garaboacasas
  */
 public class Usuario {
-    private final int id;
-    private double saldo;
 
-    public Usuario(int id, double saldoInicial) {
-        this.id = id;
-        this.saldo = saldoInicial;
+    public int id;
+
+    public Double dinero;
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", dinero=" + dinero + '}';
     }
 
     public int getId() {
         return id;
     }
 
-    public double getSaldo() {
-        return saldo;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void agregarSaldo(double cantidad) {
-        saldo += cantidad;
+    public Double getDinero() {
+        return dinero;
     }
 
-    public void restarSaldo(double cantidad) {
-        saldo -= cantidad;
+    public void setDinero(Double dinero) {
+        this.dinero = dinero;
     }
+
+    public Usuario(int id, Double dinero) {
+        this.id = id;
+        this.dinero = dinero;
+    }
+
 }
